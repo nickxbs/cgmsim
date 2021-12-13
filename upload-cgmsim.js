@@ -1,31 +1,27 @@
-const fetch = require('node-fetch');
-var result = require('dotenv').config();
-const crypto = require('crypto');
+import fetch from 'node-fetch';
 
+import crypto from 'crypto';
 
-//let's build the API_secret for the headers and the API_url for the fetch() function
-//===================================================================================
-const api_url = process.env.API_SGV2;
+export const uploadCgmSimSgv = ({ API_POST, APISECRET }, cgmSimSgv) => {
+	// let's build the API_secret for the headers and the API_url for the fetch() function
+	//= ==================================================================================
 
-const hash = crypto.createHash('sha1');
-hash.update(process.env.APISECRET);
-const hashed_secret = hash.digest('hex');
+	const hash = crypto.createHash('sha1');
+	hash.update(APISECRET);
+	const hashed_secret = hash.digest('hex');
 
-// now the fetch function itself
-//==============================
-const headers = {
-    'Content-Type': 'application/json',
-    'api-secret': hashed_secret
+	// now the fetch function itself
+	//= =============================
+	const headers = {
+		'Content-Type': 'application/json',
+		'api-secret': hashed_secret,
+	};
+
+	console.log(cgmSimSgv);
+
+	return fetch(API_POST, {
+		method: 'POST',
+		headers,
+		body: cgmSimSgv,
+	});
 };
-
-const body = require('./files/cgmsim-sgv.json');
-const body_json = JSON.stringify(body);
-console.log(body_json);
-
-
-
-fetch(api_url, {
-    method: 'POST',
-    headers: headers,
-    body: body_json,
-});

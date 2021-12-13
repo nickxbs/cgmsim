@@ -1,54 +1,46 @@
-const fetch = require('node-fetch');
-const result = require('dotenv').config();
-const fs = require('fs');
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+// import fs from 'fs';
+
+dotenv.config();
 
 const api_url = process.env.API_URL;
 const api_profile = process.env.API_PROFILE;
 const api_sgv = process.env.API_SGV;
-const api_sgv1 = process.env.API_SGV1;
+// const api_sgv1 = process.env.API_SGV1;
 
-var dir = './files';
-if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-}
+// const dir = './files';
+// if (!fs.existsSync(dir)) {
+//   fs.mkdirSync(dir);
+// }
 
-fetch(api_url)
-    .then(resTreatments => resTreatments.json())
-    .then(json => {
-        var jsonTreatments = JSON.stringify(json, null, 4);
-        fs.writeFile('./files/entries.json', jsonTreatments, 'utf8', (err) => {
-            if (err) throw err
-            console.log('File created!')
-        })
-    });
+const downloadTreatments = () => fetch(api_url);
 
-fetch(api_profile)
-    .then(resProfile => resProfile.json())
-    .then(json => {
-        var jsonProfile = JSON.stringify(json, null, 4);
-        fs.writeFile('./files/profile.json', jsonProfile, 'utf8', (err) => {
-            if (err) throw err
-            console.log('File created!')
-        })
-    });
+const downloadProfile = () => fetch(api_profile);
 
+const downloadSGV = () => fetch(api_sgv);
 
-fetch(api_sgv)
-    .then(resSGV => resSGV.json())
-    .then(json => {
-        var jsonSGV = JSON.stringify(json, null, 4);
-        fs.writeFile('./files/sgv.json', jsonSGV, 'utf8', (err) => {
-            if (err) throw err
-            console.log('File created!')
-        })
-    });
+// fetch(api_sgv1)
+//   .then((resSGV) => resSGV.json())
+//   .then((json) => {
+//     const jsonSGV = JSON.stringify(json, null, 4);
+//     fs.writeFile('./files/sgv1.json', jsonSGV, 'utf8', (err) => {
+//       if (err) throw err;
+//       console.log('File created!');
+//     });
+//   });
+const downloadAll = () => Promise.all([
+	downloadProfile(),
+	downloadSGV(),
+	downloadTreatments(),
+]).then(([
+	profile,
+	sgv,
+	entries,
+]) => ({
+	profile,
+	sgv,
+	entries,
+}));
 
-fetch(api_sgv1)
-    .then(resSGV => resSGV.json())
-    .then(json => {
-        var jsonSGV = JSON.stringify(json, null, 4);
-        fs.writeFile('./files/sgv1.json', jsonSGV, 'utf8', (err) => {
-            if (err) throw err
-            console.log('File created!')
-        })
-    });
+export default downloadAll;

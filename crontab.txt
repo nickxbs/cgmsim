@@ -3,7 +3,58 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 
 0 */6 * * * cd /home/MYUSERNAME/cgmsim && /bin/bash perlin.sh
 */5 * * * * cd /home/MYUSERNAME/cgmsim && /bin/bash get-all.sh
+node downloads.js;
+node computeBolusIOB.js;
+	->entries
+	<-last_mealtime
+
+node computeBasalIOB.js;
+ 	->entries
+	<-last_detemir
+	<-last_glargine
+
+node detemir.js;
+	->last_detemir.json
+	<-last_detemir_aggrACT
+	
+node glargine.js;
+	->last_glargine
+	<-last_glargine_aggrACT
+
+node all_meals.js
+	->entries
+	<-last_meals.json
+
+node carbs.js;
+	->last_meals
+	<-latest_carbs
+
+node arrows.js;
+	->sgv
+	<-arrows
+	
+node sinus.js;
+	<-sinuscurves
+node liver.js;
+	<-latest_liver.json
+
 */5 * * * * cd /home/MYUSERNAME/cgmsim && /bin/bash upload-cgmsim.sh
+node download_sgv1.js;
+??????
+node sgv_start.js;
+	->sgv1.json
+	->last_mealtime
+	->last_detemir
+	->last_glargine_aggrACT
+	->last_detemir_aggrACT
+	->latest_carbs
+	->arrows
+	->latest_liver
+	<-cgmsim-sgv.json
+
+node upload-cgmsim.js;
+
+
 #30 23 * * * cd /home/MYUSERNAME/cgmsim && /bin/bash surprise.sh
 0 */6 * * * cd /home/MYUSERNAME/cgmsim && /bin/bash planets.sh
 

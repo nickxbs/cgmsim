@@ -1,0 +1,87 @@
+{
+	"terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"[javascript]": {
+		"editor.defaultFormatter": "HookyQR.beautify"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "HookyQR.beautify"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "HookyQR.beautify"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "HookyQR.beautify"
+	},
+	"[typescript]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true,
+	},
+	"editor.formatOnSave": true,
+	"files.exclude": {
+		"**/coverage/**/*.*": true,
+		"**/Scripts/i18n/**/*.*": true,
+		"**/bin/**/*.*": true,
+		"**/.out/**/*.*": true,
+		"**/build-debug/**/*.*": true,
+		"**/build/**/*.*": true,
+		"**/buildManagement-Debug/**/*.*": true,
+		"**/buildManagement/**/*.*": true
+	},
+	"jira-plugin.workingProject": "",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"csharp2ts.propertiesToCamelCase": true,
+	"npm.exclude": "",
+	"beautify.language": {
+
+		"js": {
+			"type": [
+				"javascript",
+				"json",
+				"jsonc"
+			],
+			"filename": [
+				".jshintrc",
+				".jsbeautifyrc"
+			],
+
+		},
+		"css": [
+			"css",
+			"less",
+			"scss"
+		],
+		"html": [
+			"htm",
+			"html"
+		]
+	},
+	"jestrunner.configPath": "jest.json",
+	"jestrunner.debugOptions": {
+		"args": ["--no-cache"],
+		"sourcemaps": "inline",
+		"disableOptimisticBPs": true,
+	},
+	"cSpell.words": [
+		"Basals",
+		"carb",
+		"carbrate",
+		"cgmsim",
+		"cosin",
+		"cosinus",
+		"detemir",
+		"detemirs",
+		"glargine",
+		"glargines",
+		"Interm",
+		"mmol",
+		"perlin",
+		"sgvs",
+		"svgdir"
+	]
+
+}
