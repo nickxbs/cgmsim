@@ -10,7 +10,11 @@ node detemir.js;
 
 node glargine.js;
 
-node all_meals.js
+node degludec.js;
+
+node toujeo.js;
+
+node all_meals.js;
 
 node carbs.js;
 

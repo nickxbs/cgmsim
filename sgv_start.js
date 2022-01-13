@@ -28,13 +28,21 @@ var DET = require('./files/last_detemir_aggrACT.json');
 var jsonDET = JSON.stringify(DET);
 var detAct = JSON.parse(jsonDET);
 
+var DEG = require('./files/last_degludec_aggrACT.json');
+var jsonDEG = JSON.stringify(DEG);
+var degAct = JSON.parse(jsonDEG);
+
+var TOU = require('./files/last_toujeo_aggrACT.json');
+var jsonTOU = JSON.stringify(TOU);
+var touAct = JSON.parse(jsonTOU);
+
 // ENABLE THIS FOR PUMP SIMULATION
 //=================================
 // var pumpAct = require('./files/pumpBasalAct.json');
 // var jsonPumpAct = JSON.stringify(pumpAct);
 // var pumpBasalAct = JSON.parse(jsonPumpAct);
 
-let globalBasalAct = glaAct + detAct;
+let globalBasalAct = glaAct + detAct + touAct + degAct;
 let globalMealtimeAct = NRAct[0];
 
 let globlalInsulinAct = globalBasalAct + globalMealtimeAct;
@@ -93,8 +101,8 @@ console.log('this is the last perlin noise value:', lastPerls[0].noise);
 const planets = require('./files/forceVectors.json');
  // the traction of planets is about 0.0015 (Newtons), add 1 !
 let planetFactorA = 1 + planets.tractionSubject;
- // mkae the inverted dispertion a conjunction factor:
-let conjunctionFactor = 1 + (planets.globalVectorLong_p_SDnorm1 / 100);
+ // make the inverted dispersion a conjunction factor:
+let conjunctionFactor = 1 + (planets.globalVectorLong_p_SDnorm1 / 1000);
 
  // apply the correction due to inverted dispersion;
 let planetFactor = planetFactorA * conjunctionFactor;
@@ -108,7 +116,7 @@ console.log('planetFactorA * conjunction or planetFactor:', planetFactor);
 
  // the illumination fraction if the moon varies from 0 to 1, divide by 10 and add 1 !
 
-let moonFactor = ((planets.moon_illumination_fraction)/10) +1 ;
+let moonFactor = ((planets.moon_illumination_fraction)/120) + 1 ;
 console.log('moonFactor:', moonFactor);
 
 // END OF PLANETS SECTION
@@ -131,13 +139,24 @@ console.log('moonFactor:', moonFactor);
 
 
 
-
 //WITHOUT PUMP
 //============
 var variation = (sgvValues[0].sgv + BGI_ins + (liver_bgi * 18) + (carbs * 18) + (lastPerls[0].noise * 18 *6));
+var planetAndMoon = planetFactor * moonFactor;
 var variationPlanets = variation * planetFactor * moonFactor;
 
-var sgv_no_pump = Math.floor(variationPlanets);
+console.log('previous SGV:',sgvValues[0].sgv);
+console.log('new deviation:', BGI_ins + (liver_bgi * 18) + (carbs * 18) + (lastPerls[0].noise * 18 *6));
+console.log('new SGV without planets:',variation);
+console.log('planetAndMoon factor:', planetAndMoon);
+console.log('new SGV with planets:',variationPlanets);
+
+// SELECT VARIATION WITH OR WITHOUT PLANETS
+//=========================================
+var sgv_no_pump = Math.floor(variationPlanets); //with planets
+//var sgv_no_pump = Math.floor(variation); //without planets;
+
+
 
 var limited_sgv_no_pump = sgv_no_pump;
 if (sgv_no_pump >= 400) {
@@ -150,16 +169,13 @@ var dict = {"dateString" : today, "sgv" :  limited_sgv_no_pump, "type" : "sgv", 
 var dictstring = JSON.stringify(dict);
 
 
-
-
-
 fs.writeFile("./files/cgmsim-sgv.json", dictstring, function(err, result) {
     if(err) console.log('error', err);
 });
 
 
 console.log('-------------------------------------------');
-console.log('glaAct:',glaAct,'detAct:',detAct,'total basal act:', globalBasalAct);
+console.log('glaAct:',glaAct,'detAct:',detAct,'touAct',touAct,'degAct',degAct,'total basal act:', globalBasalAct);
 console.log('-------------------------------------------');
 console.log('total mealtime insulin activity:',globalMealtimeAct);
 console.log('-------------------------------------------');
